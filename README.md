@@ -1,25 +1,46 @@
-# Predictive-Lead-Scoring-DSS.
-A machine learning decision support system to predict B2C lead conversion.
-# Predictive Lead Scoring & Decision Support System (DSS)
+# Predictive Lead Scoring & Decision Support System
 
-## 📌 Business Challenge
-Organizations generate thousands of leads daily, but sales teams waste approximately 60% of their effort on leads that will never convert. This project solves that inefficiency by developing an ML-based Decision Support System (DSS) that predicts conversion probability and prioritizes leads mathematically.
+A machine-learning decision-support system that predicts which B2C leads will convert and sorts them into priority tiers for the sales team, with an interactive ipywidgets scoring panel.
 
-## 📊 Dataset & Preprocessing
-* **Dataset:** X Education Lead Scoring (9,240 rows × 37 cols).
-* **Preprocessing:** Addressed missing values via median/mode imputation, removed high-missing columns (>40%), and applied IQR clipping for outliers.
-* **Feature Engineering:** Created a custom **Engagement Score** by aggregating normalized website activity signals (Time on Website, Total Visits, Page Views).
+## Business challenge
+Only 38.5% of leads in the data ever convert, so most sales effort goes to leads that won't buy. Scoring leads by conversion probability lets the team work the best ones first.
 
-## 🤖 Machine Learning Framework
-* **Champion Model:** Random Forest Classifier (300 trees, class-weight balanced).
-* **Baseline Model:** Logistic Regression.
-* **Performance:** Achieved an **ROC-AUC of 0.884** and an **Accuracy of 81.3%**.
+## Data and preparation
+- **Dataset:** X Education lead-scoring data, 9,240 leads × 37 columns.
+- **Cleaning:** dropped columns with more than 40% missing values, median / mode imputation, IQR clipping of outliers.
+- **Feature engineering:** a composite **Engagement Score** built from normalised website activity (time on site, total visits, page views per visit).
 
-## 💡 Business Impact & ROI
-* **Projected Conversion Lift:** 38.5% → 70%+ by concentrating on 'HOT' leads.
-* **Efficiency:** 50-60% reduction in wasted sales outreach.
+## Models
+| Model | Test ROC-AUC |
+|---|---|
+| Logistic Regression (baseline) | 0.872 |
+| **Random Forest** (300 trees, class-balanced) | **0.884** |
 
-## 🚀 How to Run the Pipeline
-1. Clone the repository.
-2. Ensure the dataset is in the root directory.
-3. Run the python script to generate the models and launch the interactive ipywidgets DSS dashboard.
+The Random Forest reaches 81.3% accuracy and 81.9% recall on the test set, correctly identifying 862 of 1,068 converting leads.
+
+## Decision support
+The notebook's final cell launches an ipywidgets panel: enter a lead's attributes and get a conversion probability plus a tier (HOT / WARM / COLD / DEAD) with a recommended action. Trained artifacts are saved with `joblib`.
+
+## Business impact (as projected in the report)
+- Concentrating on HOT leads could lift the conversion rate of worked leads from 38.5% toward 70%.
+- Less time spent on leads unlikely to convert.
+
+## Repository structure
+```
+├── lead_scoring_dss.ipynb    # Cleaning, features, models, evaluation, scoring widget
+├── data/
+│   └── lead_scoring.csv      # X Education lead data
+└── reports/
+    ├── report.pdf            # Full project report
+    └── presentation.pptx
+```
+
+## How to run
+```bash
+pip install -r requirements.txt
+jupyter notebook lead_scoring_dss.ipynb
+```
+Run from the repository root; the notebook finds `data/lead_scoring.csv` automatically. Run the second cell to open the scoring panel.
+
+## Tech stack
+Python · pandas · scikit-learn · Matplotlib · Seaborn · ipywidgets · joblib
